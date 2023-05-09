@@ -1,8 +1,8 @@
 //
-//  MeetingView.swift
+//  ContentView.swift
 //  Scrumdinger
 //
-//  Created by 亀窪翼 on 2023/05/09.
+//  Created by 亀窪翼 on 2023/05/08.
 //
 
 import SwiftUI
@@ -47,4 +47,3 @@ struct MeetingView_Previews: PreviewProvider {
         MeetingView(scrum: .constant(DailyScrum.sampleData[0]))
     }
 }
-

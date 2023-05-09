@@ -2,7 +2,7 @@
 //  DetailEditView.swift
 //  Scrumdinger
 //
-//  Created by 亀窪翼 on 2023/05/09.
+//  Created by 亀窪翼 on 2023/05/08.
 //
 
 import SwiftUI
@@ -10,40 +10,40 @@ import SwiftUI
 struct DetailEditView: View {
     @Binding var scrum: DailyScrum
     @State private var newAttendeeName = ""
-
+    
     var body: some View {
-        Form {
-            Section(header: Text("Meeting Info")) {
-                TextField("Title", text: $scrum.title)
-                HStack {
-                    Slider(value: $scrum.lengthInMinutesAsDouble, in: 5...30, step: 1) {
-                        Text("Length")
+        Form{
+            Section(header: Text("会議情報")) {
+                TextField("title", text: $scrum.title)
+                HStack{
+                    Slider(value: $scrum.lengthInMinutesAsDouble, in: 5...30, step: 1){
+                        Text("時間")
                     }
-                    .accessibilityValue("\(scrum.lengthInMinutes) minutes")
+                    .accessibilityValue("\(scrum.lengthInMinutes) 分")
                     Spacer()
-                    Text("\(scrum.lengthInMinutes) minutes")
+                    Text("\(scrum.lengthInMinutes) 分")
                         .accessibilityHidden(true)
                 }
                 ThemePicker(selection: $scrum.theme)
             }
-            Section(header: Text("Attendees")) {
-                ForEach(scrum.attendees) { attendee in
+            Section(header: Text("参加者")){
+                ForEach(scrum.attendees){ attendee in
                     Text(attendee.name)
                 }
-                .onDelete { indices in
+                .onDelete{ indices in
                     scrum.attendees.remove(atOffsets: indices)
                 }
-                HStack {
-                    TextField("New Attendee", text: $newAttendeeName)
+                HStack{
+                    TextField("追加参加者", text: $newAttendeeName)
                     Button(action: {
                         withAnimation {
                             let attendee = DailyScrum.Attendee(name: newAttendeeName)
                             scrum.attendees.append(attendee)
                             newAttendeeName = ""
                         }
-                    }) {
+                    }){
                         Image(systemName: "plus.circle.fill")
-                            .accessibilityLabel("Add attendee")
+                            .accessibilityLabel("追加参加者")
                     }
                     .disabled(newAttendeeName.isEmpty)
                 }

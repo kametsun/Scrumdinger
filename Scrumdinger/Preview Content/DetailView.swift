@@ -2,33 +2,33 @@
 //  DetailView.swift
 //  Scrumdinger
 //
-//  Created by 亀窪翼 on 2023/05/09.
+//  Created by 亀窪翼 on 2023/05/08.
 //
 
 import SwiftUI
 
 struct DetailView: View {
     @Binding var scrum: DailyScrum
+    
     @State private var editingScrum = DailyScrum.emptyScrum
-
     @State private var isPresentingEditView = false
     
     var body: some View {
         List {
-            Section(header: Text("Meeting Info")) {
-                NavigationLink(destination: MeetingView(scrum: $scrum)) {
-                    Label("Start Meeting", systemImage: "timer")
+            Section(header: Text("スクラムの情報")){
+                NavigationLink(destination: MeetingView(scrum: $scrum)){
+                    Label("開始時間", systemImage: "timer")
                         .font(.headline)
                         .foregroundColor(.accentColor)
                 }
-                HStack {
-                    Label("Length", systemImage: "clock")
+                HStack{
+                    Label("所要時間", systemImage: "clock")
                     Spacer()
-                    Text("\(scrum.lengthInMinutes) minutes")
+                    Text("\(scrum.lengthInMinutes) 分")
                 }
                 .accessibilityElement(children: .combine)
-                HStack {
-                    Label("Theme", systemImage: "paintpalette")
+                HStack{
+                    Label("テーマ", systemImage: "paintpalette")
                     Spacer()
                     Text(scrum.theme.name)
                         .padding(4)
@@ -38,31 +38,31 @@ struct DetailView: View {
                 }
                 .accessibilityElement(children: .combine)
             }
-            Section(header: Text("Attendees")) {
-                ForEach(scrum.attendees) { attendee in
+            Section(header: Text("出席者")){
+                ForEach(scrum.attendees){ attendee in
                     Label(attendee.name, systemImage: "person")
                 }
             }
         }
         .navigationTitle(scrum.title)
-        .toolbar {
-            Button("Edit") {
+        .toolbar{
+            Button("編集"){
                 isPresentingEditView = true
                 editingScrum = scrum
             }
         }
-        .sheet(isPresented: $isPresentingEditView) {
-            NavigationStack {
+        .sheet(isPresented: $isPresentingEditView){
+            NavigationStack{
                 DetailEditView(scrum: $editingScrum)
                     .navigationTitle(scrum.title)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
+                            Button("キャンセル"){
                                 isPresentingEditView = false
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") {
+                            Button("完了"){
                                 isPresentingEditView = false
                                 scrum = editingScrum
                             }
@@ -75,9 +75,8 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
+        NavigationStack{
             DetailView(scrum: .constant(DailyScrum.sampleData[0]))
         }
     }
 }
-
